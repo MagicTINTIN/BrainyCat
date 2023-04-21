@@ -1,4 +1,3 @@
-# ChalineBotv2
-Future version du bot discord Chaline
+# BrainyCat
 
-Le développement est en cours...# BrainyCat
+An odd cat which can understand brainfuck language...

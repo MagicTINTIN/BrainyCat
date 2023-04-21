@@ -1,0 +1,14 @@
+{
+    "id":"XXXXXXXXXX",
+    "name":"A server name",
+    "version":1.0,
+    "commands":[],
+    "welcoming":{},
+    "boosting":{},
+    "exiting":{},
+    "counters":{},
+    "admininfo":{
+        "mutes":[],
+        "other":[]
+    }
+}
