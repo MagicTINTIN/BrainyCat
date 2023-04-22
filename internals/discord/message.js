@@ -24,9 +24,9 @@ module.exports = {
             chdest.send({ content: content, files: attachments, embeds: embeds });
     },
     /**
-        * Send a message
+        * reply to a message
         *
-        * @param {Message} message channel destination (id or element)
+        * @param {Message} message message to reply
         * @param {string} content message to send
         * @param {Embed[]} [embeds] embed to send
         * @param {Attachment[]} [attachments] attachment to send 

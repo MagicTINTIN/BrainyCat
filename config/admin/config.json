@@ -1,9 +1,11 @@
 {
-    "prefix":"?",
-    "mutedservers":{
-        "864937703338278932":{
-            "automuted":false,
-            "reason":"just a test"
+    "appId": "815337853055008819",
+    "publicKey": "ae2170c0dcbceccb9e9097a219cdc62f5b3b168b676f8d9dd4005a14d1e6e83d",
+    "prefix": "?",
+    "mutedservers": {
+        "864937703338278932": {
+            "automuted": false,
+            "reason": "just a test"
         }
     }
 }

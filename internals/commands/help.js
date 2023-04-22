@@ -1,7 +1,21 @@
+const { dscrd } = require("../")
+const interaction = require("../discord/interaction")
+
 module.exports = {
+    type: 'slash',
     name: 'help',
+    description: 'Get help on how to use this bot',
+    options: [
+        {
+            required: true,
+            type: "string",
+            name: "code",
+            description: "Code to be executed"
+        },
+    ],
+
     execute(info) {
-        dscrd.message.sendch(info.channel, `To use the bot you just have to use /bf command.
+        dscrd.interaction.reply(info.interaction, `To use the bot you just have to use /bf command.
 
         You can also save your codes by typing /save *(private|publicuse|opensource, optional)*,
         See the list of code you (you or someone else) created with /list *(PseudoOfTheCreator, optional)*,
