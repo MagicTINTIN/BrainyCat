@@ -1,4 +1,4 @@
-const { dscrd } = require("../")
+const { base, dscrd } = require("../")
 
 module.exports = {
     type: 'slash',
@@ -14,11 +14,11 @@ module.exports = {
     ],
 
     execute(info) {
-        let splittedmsg = message.content.split("$");
+        let splittedmsg = dscrd.interaction.getOpt(info.interaction, 'string', 'code').split("$");
         let bfres = base.bf.exe(splittedmsg[0], splittedmsg);
         if (bfres.mem[bfres.posMem])
             bfres.mem[bfres.posMem] = `**${bfres.mem[bfres.posMem]}**`;
-        dscrd.interaction.reply(info.interaction,
+        dscrd.interaction.reply(info.interaction, false,
             (bfres.success ? "Successfully executed in " : `**Error** occurred at character **${bfres.posProg}** after `)
             + bfres.step + " steps :"
             + ((bfres.str.length > 0) ? "\n```brainfuck\n" + bfres.str + "```" : "")

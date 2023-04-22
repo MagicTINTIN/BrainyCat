@@ -21,6 +21,7 @@ exports.client = client;
 
 // Import librairies
 const bot = require("./internals");
+exports.bot = bot;
 const { tests } = require("./internals");
 
 // Prevents bot from crash
@@ -90,10 +91,10 @@ client.on('guildUpdate', async (oldGuild, newGuild) => {
 
 client.on('messageCreate', message => {
     if (message.guild.id in cfg.mutedservers) return;
-    tests.msg(message);
-    //bot.alert.warn("Nouveau message")
-    tests.bf(message);
-    bot.dscrd.message.onNew(message);
+    // tests.msg(message);
+    // //bot.alert.warn("Nouveau message")
+    // tests.bf(message);
+    // bot.dscrd.message.onNew(message);
 });
 
 client.on('messageUpdate', (oldMessage, newMessage) => {

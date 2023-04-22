@@ -14,13 +14,14 @@ module.exports = {
     sendch: function (channel, content, embeds = null, attachments = null) {
 
         let chdest = (typeof (channel) == "string") ? base.ch.get(channel) : channel;
+
         if (chdest == null) {
             console.log("Wrong channel ID");
             return 1;
         }
-        if (content.length > 0)
+        if (content.length = 0)
             content = null;
-        if (content != null || embeds != null || attachments != null)
+        if (true || content != null || embeds != null || attachments != null)
             chdest.send({ content: content, files: attachments, embeds: embeds });
     },
     /**
@@ -32,7 +33,7 @@ module.exports = {
         * @param {Attachment[]} [attachments] attachment to send 
         */
     reply: function (message, content, embeds = null, attachments = null) {
-        if (content.length > 0)
+        if (content.length = 0)
             content = null;
         if (content != null || embeds != null || attachments != null)
             message.reply({ content: content, files: attachments, embeds: embeds });
