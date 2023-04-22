@@ -77,7 +77,7 @@ function exe(rawcode, args) {
             res.str += String.fromCharCode(res.mem[res.posMem]);
         }
         else if (cmd == ",") {
-            if (debugbf || true) console.log("get", argnb, args);
+            if (debugbf) console.log("get", argnb, args);
             if (args[argnb])
                 res.mem[res.posMem] = args[argnb].charCodeAt(0);
             argnb++;

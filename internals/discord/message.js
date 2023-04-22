@@ -18,8 +18,24 @@ module.exports = {
             console.log("Wrong channel ID");
             return 1;
         }
-        if (content.length > 0 || embeds != null || attachments != null)
-            chdest.send({ content: content, files: attachments, embeds: embeds })
+        if (content.length > 0)
+            content = null;
+        if (content != null || embeds != null || attachments != null)
+            chdest.send({ content: content, files: attachments, embeds: embeds });
+    },
+    /**
+        * Send a message
+        *
+        * @param {Message} message channel destination (id or element)
+        * @param {string} content message to send
+        * @param {Embed[]} [embeds] embed to send
+        * @param {Attachment[]} [attachments] attachment to send 
+        */
+    reply: function (message, content, embeds = null, attachments = null) {
+        if (content.length > 0)
+            content = null;
+        if (content != null || embeds != null || attachments != null)
+            message.reply({ content: content, files: attachments, embeds: embeds });
     },
     /**
         *   

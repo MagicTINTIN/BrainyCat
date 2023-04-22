@@ -31,4 +31,8 @@ module.exports = {
     file: require("./tools/file"),
     time: require("./tools/time"),
     init: require("./tools/init"),
+    // Commands
+    commands: {
+        help: require("./commands/help")
+    }
 }
