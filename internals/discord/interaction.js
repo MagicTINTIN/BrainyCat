@@ -35,7 +35,12 @@ module.exports = {
                                 option.setName(optioncfg.name)
                                     .setDescription(optioncfg.description)
                                     .setRequired(optioncfg.required))
-                        if (optioncfg.type == "string") {
+                        else if (optioncfg.type == "boolean")
+                            slashbuildingcmd.addBooleanOption(option =>
+                                option.setName(optioncfg.name)
+                                    .setDescription(optioncfg.description)
+                                    .setRequired(optioncfg.required))
+                        else if (optioncfg.type == "string") {
 
                             let optionobject = new SlashCommandStringOption()
 
@@ -46,6 +51,11 @@ module.exports = {
                                 optionobject.setMinLength(optioncfg.min);
                             if (optioncfg.max)
                                 optionobject.setMaxLength(optioncfg.max);
+                            if (optioncfg.choices)
+                                for (const choice of optioncfg.choices) {
+                                    optionobject.addChoices(choice);
+                                }
+
 
                             slashbuildingcmd.addStringOption(optionobject)
                         }
@@ -75,6 +85,7 @@ module.exports = {
                 channel: interaction.channel.id,
                 user: interaction.user,
                 userid: interaction.user.id,
+                tag: interaction.user.tag,
                 member: interaction.member
             }
             client.cmds.get(interaction.commandName).execute(info);
@@ -108,7 +119,7 @@ module.exports = {
     getOpt: function (interaction, type, name) {
         if (type == 'string')
             return interaction.options.getString(name);
-        if (type == 'boolean')
+        else if (type == 'boolean')
             return interaction.options.getBoolean(name);
     },
 }

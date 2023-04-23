@@ -12,7 +12,7 @@ const debugbf = false;
  */
 
 String.prototype.cleantobf = function () {
-    return this.replace(/[^\+\-\[\]\<\>\,\.]+/g, "");
+    return this.match(/[\[\]\<\>\.\,\+\-]|\{[^\}]*\}+/g).join("") // /[^\+\-\[\]\<\>\,\.]+/g to only exclude +-<>[].,
 }
 
 function cleanMem(mem) {

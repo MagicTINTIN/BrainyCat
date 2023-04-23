@@ -1,5 +1,6 @@
 const { dscrd } = require("../")
 const interaction = require("../discord/interaction")
+const debugmsg = require("../../config/admin/debugmsg.json");
 
 module.exports = {
     type: 'slash',
@@ -18,18 +19,19 @@ module.exports = {
     execute(info) {
         const { bot } = require("../../")
         //console.log(info);
-        let pseudo = dscrd.interaction.getOpt(info.interaction, 'string', 'pseudo')
-        let usrcfg = bot.file.ldUsrCfg(pseudo);
-
-        if (usrcfg.id == undefined || usrcfg.id == info.userid) {
+        let pseudo = dscrd.interaction.getOpt(info.interaction, 'string', 'pseudo').split(".").join("");
+        let usrcfg = bot.file.ldUsrCfg(pseudo, true);
+        if (pseudo.length < 4)
+            dscrd.interaction.reply(info.interaction, true, `You can't use some characters and your pseudo length has to be greater than 4`)
+        else if ((usrcfg.id == undefined || usrcfg.id == info.userid)) {
             usrcfg.id = info.userid;
-            bot.file.svUsrCfg(pseudo, usrcfg);
+            bot.file.svUsrCfg(pseudo, usrcfg, true);
 
             // update usr lst
-            let usrlst = bot.file.ldUsrLst(false);
+            let usrlst = bot.file.ldUsrLst(true);
             usrlst.usrs[info.userid] = pseudo;
-            bot.file.svUsrLst(usrlst);
-
+            bot.file.svUsrLst(usrlst, true);
+            bot.log.all(`${debugmsg.interactions.action}${info.tag} ${debugmsg.interactions.register.newuser} ${pseudo}`)
             dscrd.interaction.reply(info.interaction, true, `You successfully registered with the pseudo *${pseudo}*`);
         }
         else

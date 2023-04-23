@@ -1,1 +1,14 @@
-{"id":"444579657279602699","pseudo":"MagicTINTIN","version":1,"codes":{},"other":{}}
+{
+    "pseudo": "MagicTINTIN",
+    "version": 1,
+    "codes": {
+        "test": {
+            "codetext": "++ensuite>>+[on attaque la boucle et on utilise {MagicTINTIN.increment}-]>",
+            "codeclean": "++>>+[{MagicTINTIN.increment}-]>",
+            "rights": "publicuse",
+            "created": 1682264286669,
+            "modified": 1682264286669
+        }
+    },
+    "other": {}
+}

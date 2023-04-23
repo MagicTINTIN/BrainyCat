@@ -25,6 +25,10 @@
     },
     "interactions": {
         "unknownoption": "⚠️ | Option type unkown : ",
-        "loaded": "✅ | Interactions have been loaded : "
+        "loaded": "✅ | Interactions have been loaded : ",
+        "action": "📝 | ",
+        "register": {
+            "newuser": " s'est enregistré⋅e en tant que "
+        }
     }
 }
