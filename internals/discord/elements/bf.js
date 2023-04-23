@@ -13,12 +13,13 @@ const debugbf = false;
 
 const filemgr = require("../../tools/file");
 
-String.prototype.cleantobf = function () {
-    return this.match(/[\[\]\<\>\.\,\+\-]|\{[^\}]*\}+/g).join("") // /[^\+\-\[\]\<\>\,\.]+/g to only exclude +-<>[].,
+String.prototype.cleantobfx = function () {
+    cleaned = this.match(/[\[\]\<\>\.\,\+\-]|\{[^\}]*\}+/g)
+    return (cleaned != null) ? cleaned.join("") : "" // /[^\+\-\[\]\<\>\,\.]+/g to only exclude +-<>[].,
 }
 
 function replaceFcts(code) {
-    console.log("cleaning", code);
+    //console.log("cleaning", code);
     const toreplace = code.match(/\{[^\}]*\}+/g);
 
     if (toreplace != null) {
@@ -26,7 +27,7 @@ function replaceFcts(code) {
             const fctobj = fct.split("{").join("").split("}").join("").split(".")
 
             let usrcfg = filemgr.ldUsrCfg(fctobj[0], false);
-            console.log(usrcfg);
+
             if (!usrcfg || !usrcfg.codes || !usrcfg.codes[fctobj[1]] || usrcfg.codes[fctobj[1]].rights == "private" || !usrcfg.codes[fctobj[1]].codeclean)
                 code = code.split(`${fct}`).join("")
             else
@@ -53,9 +54,9 @@ function cleanMem(mem) {
         * @return {bfreturn} brainfuck execution
         */
 function exe(rawcode, args) {
-    let code = replaceFcts(rawcode.cleantobf());
+    let code = replaceFcts(rawcode.cleantobfx());
     let res = {
-        code: code.cleantobf(),
+        code: code.cleantobfx(),
         step: 0,
         str: "",
         mem: [0],

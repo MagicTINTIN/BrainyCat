@@ -2,7 +2,8 @@ const { dscrd } = require("../")
 const interaction = require("../discord/interaction")
 
 String.prototype.cleantobf = function () {
-    return this.match(/[\[\]\<\>\.\,\+\-]|\{[^\}]*\}+/g).join("") // /[^\+\-\[\]\<\>\,\.]+/g to only exclude +-<>[].,
+    cleaned = this.match(/[\[\]\<\>\.\,\+\-]|\{[^\}]*\}+/g)
+    return (cleaned != null) ? cleaned.join("") : "" // /[^\+\-\[\]\<\>\,\.]+/g to only exclude +-<>[].,
 }
 
 module.exports = {
@@ -55,7 +56,7 @@ module.exports = {
         let rights = dscrd.interaction.getOpt(info.interaction, 'string', 'rights');
         let overwrite = dscrd.interaction.getOpt(info.interaction, 'boolean', 'overwrite');
 
-        let usrcfg = bot.file.ldUsrCfg(pseudo, false);
+        let usrcfg = bot.file.ldUsrCfg(pseudo, true);
 
         if (!rights)
             rights = 'opensource';
@@ -69,7 +70,7 @@ module.exports = {
                 created: now,
                 modified: now,
             }
-            bot.file.svUsrCfg(pseudo, usrcfg, false);
+            bot.file.svUsrCfg(pseudo, usrcfg, true);
             dscrd.interaction.reply(info.interaction, true, `${name} has been saved ! It will execute\n\`\`\`brainfuck\n${usrcfg.codes[name].codeclean}\`\`\``)
         }
         else

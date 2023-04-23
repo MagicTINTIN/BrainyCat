@@ -9,7 +9,7 @@ module.exports = {
             required: true,
             type: "string",
             name: "code",
-            description: "Code to be executed"
+            description: "Code to be executed (add $X to add entries which will be read by , and be equal to X)"
         },
     ],
 

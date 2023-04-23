@@ -19,6 +19,9 @@ Delete codes with /del *theProgramNameYouWantToDelete*.
 
 To save your codes you will need to register one time with /register *yourPseudo*.
 
+When you are executing code put $X to simulate a , entry.
+They will be read in the order.
+For instance \`,>,. $4$b\` will give you [52|98] and will prompt 'b'
 Finally, you can import other codes (even made by other people who put their own code in publicuse or opensource) with **{Pseudo.ModuleName}** in your code
         `)
     }

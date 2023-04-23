@@ -53,7 +53,6 @@ client.once('ready', () => {
     bot.log.all(bot.base.clt.lstsrv(), true);
     bot.base.clt.setStatus(commsg.status.starting, 0, 1);
     bot.log.all(debugmsg.init.endInitMsg, true, "**");
-
 });
 
 client.on('debug', async info => {

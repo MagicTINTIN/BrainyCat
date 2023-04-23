@@ -1,10 +1,12 @@
 {
-    "status":
-    {
-        "starting":"waking up...",
-        "exiting":"Stopping after hard working for",
+    "status": {
+        "starting": "waking up...",
+        "exiting": "Stopping after hard working for",
         "playinglist": [
-            ""
+            "/bf",
+            "/help",
+            "brainf*ck",
+            "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>++.>+++++.<<+++."
         ],
         "listeninglist": [
             ""

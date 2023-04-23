@@ -106,6 +106,8 @@ module.exports = {
         //console.log(content);
         if (content.length = 0)
             content = null;
+        else
+            content = content.match(/(.[\s\S]{1,1900})/g)[0];
         if (content != null || embeds != null || attachments != null)
             interaction.reply({ content: content, files: attachments, embeds: embeds, ephemeral: ephemeral });
     },

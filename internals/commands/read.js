@@ -10,22 +10,38 @@ module.exports = {
             required: true,
             type: "string",
             name: "name",
-            description: "Name of the program you want to read",
+            description: "Name of the program you want to read (ex: SneakyCat.helloworld or yourProgramName)",
         },
     ],
     execute(info) {
         //console.log(info);
-        dscrd.interaction.reply(info.interaction, true, `To use the bot you just have to use /bf command.
+        const { bot } = require("../../");
 
-You can also save your codes by typing /save *(private|publicuse|opensource, optional)*,
-See the list of code you (you or someone else) created with /list *(PseudoOfTheCreator, optional)*,
-Edit read codes with /read *theProgramNameYouWantToRead*, if this program belongs to someone else who put it on opensource you will be able to read with /read *thePseudoOfTheCreator.theProgramNameYouWantToRead*
-Edit your codes with /edit *theProgramNameYouWantToEdit*,
-Delete codes with /del *theProgramNameYouWantToDelete*.
+        let usrlst = bot.file.ldUsrLst(true);
+        let pseudo = usrlst.usrs[info.userid];
+        const program = dscrd.interaction.getOpt(info.interaction, 'string', 'name').split(".");
 
-To save your codes you will need to register one time with /register *yourPseudo*.
+        if (!pseudo && program.length < 2) return dscrd.interaction.reply(info.interaction, true, `You are not registered yet, so you don't have any program to read...`);
 
-Finally, you can import other codes (even made by other people who put their own code in publicuse or opensource) with **{Pseudo.ModuleName}** in your code
-        `)
+        if (program.length < 2) {
+            let usrcfg = bot.file.ldUsrCfg(pseudo, true);
+            if (!usrcfg.codes[program[0]])
+                dscrd.interaction.reply(info.interaction, true, `You don't have any program called ${program[0]}`);
+            else
+                dscrd.interaction.reply(info.interaction, true, `Here is the content of ${program[0]}\n\`\`\`brainfuck\n${usrcfg.codes[program[0]].codetext}\n\`\`\``);
+        }
+        else {
+            let usrcfg = bot.file.ldUsrCfg(program[0], true);
+            if (!usrcfg || !usrcfg.id || !usrcfg.codes) return dscrd.interaction.reply(info.interaction, true, `${program[1]} doesn't seem to exist :/`);
+
+            if (!usrcfg.codes[program[1]] || !usrcfg.codes[program[1]].codetext)
+                dscrd.interaction.reply(info.interaction, true, `${program[1]} don't have any program called ${program[0]}`);
+            else {
+                if (usrcfg.codes[program[1]].rights != 'opensource')
+                    dscrd.interaction.reply(info.interaction, true, `${program[0]} didn't set his program ${program[1]} as Open Source`);
+                else
+                    dscrd.interaction.reply(info.interaction, true, `Here is the content of ${program[0]}.${program[1]}\n\`\`\`brainfuck\n${usrcfg.codes[program[1]].codetext}\n\`\`\``);
+            }
+        }
     }
 }

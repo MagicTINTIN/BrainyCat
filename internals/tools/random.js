@@ -29,4 +29,14 @@ module.exports = {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
     },
+
+    /**
+        * Get a random object of array
+        *
+        * @param {Object[]} arr
+        * @return {int} 
+        */
+    obj: function (arr) {
+        return arr[this.int(0, arr.length - 1)];
+    },
 };
