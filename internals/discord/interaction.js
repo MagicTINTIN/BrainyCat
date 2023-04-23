@@ -1,4 +1,4 @@
-const { BaseInteraction, SlashCommandBuilder, REST, Routes, InteractionType } = require("discord.js");
+const { BaseInteraction, SlashCommandBuilder, REST, Routes, InteractionType, SlashCommandStringOption } = require("discord.js");
 const fs = require('fs');
 const path = require('path');
 const cfg = require('../../config/admin/config.json');
@@ -35,11 +35,20 @@ module.exports = {
                                 option.setName(optioncfg.name)
                                     .setDescription(optioncfg.description)
                                     .setRequired(optioncfg.required))
-                        if (optioncfg.type == "string")
-                            slashbuildingcmd.addStringOption(option =>
-                                option.setName(optioncfg.name)
-                                    .setDescription(optioncfg.description)
-                                    .setRequired(optioncfg.required))
+                        if (optioncfg.type == "string") {
+
+                            let optionobject = new SlashCommandStringOption()
+
+                            optionobject.setName(optioncfg.name)
+                                .setDescription(optioncfg.description)
+                                .setRequired(optioncfg.required)
+                            if (optioncfg.min)
+                                optionobject.setMinLength(optioncfg.min);
+                            if (optioncfg.max)
+                                optionobject.setMaxLength(optioncfg.max);
+
+                            slashbuildingcmd.addStringOption(optionobject)
+                        }
                         else
                             bot.log.all(dbgmsg.interactions.unknownoption + cmd.name + ">" + optioncfg.type);
                     }
@@ -50,7 +59,7 @@ module.exports = {
 
         const interactioncmdjson = interactioncmd.map(command => command.toJSON());
         rest.put(Routes.applicationCommands(cfg.appId), { body: interactioncmdjson })
-            .then(() => bot.log.all(dbgmsg.interactions.loaded + internb + " interactions"))
+            .then(() => bot.log.all(dbgmsg.interactions.loaded + internb + " interactions", true))
             .catch(console.error);
     },
     /**
@@ -65,6 +74,7 @@ module.exports = {
                 interaction: interaction,
                 channel: interaction.channel.id,
                 user: interaction.user,
+                userid: interaction.user.id,
                 member: interaction.member
             }
             client.cmds.get(interaction.commandName).execute(info);

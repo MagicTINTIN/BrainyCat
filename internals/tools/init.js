@@ -1,14 +1,16 @@
 const { client } = require("../../index.js");
 const discord = require("discord.js");
+const dbgmsg = require('../../config/admin/debugmsg.json');
 
 
 function init() {
-    const { dscrd } = require("../")
+    const { bot } = require("../../")
 
-    client.glddata = new discord.Collection();
+    client.usrdata = new discord.Collection();
     client.cmds = new discord.Collection();
-
-    dscrd.interaction.init();
+    bot.file.ldUsrLst(false);
+    bot.log.all(dbgmsg.tools.file.ldUsrLst, true);
+    bot.dscrd.interaction.init();
 }
 
 module.exports = init;

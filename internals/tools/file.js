@@ -1,88 +1,120 @@
 const fs = require('fs');
 const path = require('path');
 const { client } = require("../../index");
-const bot = require("../index")
 const debugmsg = require("../../config/admin/debugmsg.json");
 const cfgVersion = 1.0;
 
 module.exports = {
     /**
-        * Load guild config
+        * Load user config
         *
-        * @param {string} guildid the guild id you want to load config
+        * @param {string} pseudo the user id you want to load config
         * @param {boolean} muted to mute loading messages (default = false)
         */
-    ldGldCfg: function (guildid, muted = false) {
-        if (client.glddata && client.glddata.get(guildid))
-            return client.glddata.get(guildid)
-        else if (!client.glddata.get(guildid)) {
-            return;
-        }
+    ldUsrCfg: function (pseudo, muted = false) {
+        const { bot } = require('../../');
+
+        if (client.usrdata && client.usrdata.get(pseudo))
+            return client.usrdata.get(pseudo)
+
         try { // Loading previous if it exists
-            var previousfile = JSON.parse(fs.readFileSync(path.resolve(`./config/servers/${guildid}.json`)));
-            if (!muted) bot.log.all(debugmsg.tools.file.caching + " guildCfg : " + guildid)
-            client.glddata.get(guildid) = previousfile;
+            var previousfile = JSON.parse(fs.readFileSync(path.resolve(`./config/users/${pseudo}.json`)));
+            if (!muted) bot.log.all(debugmsg.tools.file.caching + " userCfg : " + pseudo)
+            client.usrdata.get(pseudo) = previousfile;
             return previousfile;
         } catch (err) {
-            if (!muted) bot.log.all(debugmsg.tools.file.nofile + " guildCfg : " + guildid);
+            if (!muted) bot.log.all(debugmsg.tools.file.nofile + " userCfg : " + pseudo);
 
             const datetime = Date.now();
 
-            var guildCfgJSON = {
-                id: guildid,
-                name: bot.base.gld.gname(guildid),
+            var userCfgJSON = {
+                id: undefined,
+                pseudo: pseudo,
                 version: cfgVersion,
-                commands: [],
-                welcoming: {},
-                boosting: {},
-                exiting: {},
-                counters: {},
-                stats: {
-                    evolution: {
-                        membercount: [{ time: datetime, value: bot.base.gld.gmembercount(guildid) }],
-                        msgs: [{ time: datetime, value: 0 }],
-                        reacts: [{ time: datetime, value: 0 }]
-                    },
-                    global: {
-                        // less than a day, a week, a month, a year and more than a year
-                        agepopulation: { ltd: null, ltw: null, ltm: null, lty: null, mty: null },
-                        // stats on 1 month
-                        exitingage: {
-                            week1: { ltd: 0, ltw: 0, ltm: 0, lty: 0, mty: 0 },
-                            week2: { ltd: 0, ltw: 0, ltm: 0, lty: 0, mty: 0 },
-                            week3: { ltd: 0, ltw: 0, ltm: 0, lty: 0, mty: 0 },
-                            week4: { ltd: 0, ltw: 0, ltm: 0, lty: 0, mty: 0 },
-                        }
-                    },
-                    admininfo: {
-                        mutes: [],
-                        other: []
-                    }
-                }
+                codes: {},
+                other: {}
             }
-            return guildCfgJSON;
+            return userCfgJSON;
         }
 
     },
     /**
-        * Save guild config
+        * Save user config
         *
-        * @param {string} guildid the guild id you want to save config
-        * @param {Object} jsondata the guild id you want to save config
+        * @param {string} pseudo the pseudo you want to save config
+        * @param {Object} jsondata the user id you want to save config
         * @param {boolean} muted to mute saving messages (default = false)
         */
-    svGldCfg: function (guildid, jsondata, muted = false) {
-        client.glddata.get(guildid) = jsondata;
+    svUsrCfg: function (pseudo, jsondata, muted = false) {
+        const { bot } = require('../../');
+
+        client.usrdata.set(pseudo, jsondata);
         // export new file
         const jsonStringcfg = JSON.stringify(jsondata);
-        fs.writeFile(`./servers/${guild.id}.json`, jsonStringcfg, err => {
+        fs.writeFile(`./config/users/${pseudo}.json`, jsonStringcfg, err => {
             if (err) {
                 if (!muted) {
-                    bot.log.all(debugmsg.tools.file.errsaving + guildid);
+                    bot.log.all(debugmsg.tools.file.errsaving + pseudo);
                     bot.alert.err(err);
                 }
             } else {
-                if (!muted) bot.log.all(debugmsg.tools.file.saving + guildid);
+                if (!muted) bot.log.all(debugmsg.tools.file.saving + pseudo);
+            }
+
+        })
+    },
+
+
+    /**
+        * Load user list
+        *
+        * @param {boolean} muted to mute loading messages (default = false)
+        */
+    ldUsrLst: function (muted = false) {
+        const { bot } = require('../../');
+
+        if (client.usrdata && client.usrdata.get('usrs'))
+            return client.usrdata.get('usrs')
+
+        try { // Loading previous if it exists
+            var previousfile = JSON.parse(fs.readFileSync(path.resolve(`./config/users/usrs.json`)));
+            if (!muted) bot.log.all(debugmsg.tools.file.caching + " userCfg : " + 'usrs')
+            client.usrdata.set('usrs', previousfile);
+            return previousfile;
+        } catch (err) {
+            if (!muted) bot.log.all(debugmsg.tools.file.nofile + " userCfg : " + 'usrs');
+
+            const datetime = Date.now();
+
+            var userCfgJSON = {
+                id: undefined,
+                version: cfgVersion,
+                usrs: {}
+            }
+            return userCfgJSON;
+        }
+
+    },
+    /**
+        * Save user list
+        *
+        * @param {Object} jsondata the user id you want to save config
+        * @param {boolean} muted to mute saving messages (default = false)
+        */
+    svUsrLst: function (jsondata, muted = false) {
+        const { bot } = require('../../');
+
+        client.usrdata.set('usrs', jsondata);
+        // export new file
+        const jsonStringcfg = JSON.stringify(jsondata);
+        fs.writeFile(`./config/users/usrs.json`, jsonStringcfg, err => {
+            if (err) {
+                if (!muted) {
+                    bot.log.all(debugmsg.tools.file.errsaving + 'usrs');
+                    bot.alert.err(err);
+                }
+            } else {
+                if (!muted) bot.log.all(debugmsg.tools.file.saving + 'usrs');
             }
 
         })
