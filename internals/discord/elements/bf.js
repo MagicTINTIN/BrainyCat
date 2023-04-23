@@ -11,8 +11,31 @@ const debugbf = false;
  * @property {int} posMem memory frame
  */
 
+const filemgr = require("../../tools/file");
+
 String.prototype.cleantobf = function () {
     return this.match(/[\[\]\<\>\.\,\+\-]|\{[^\}]*\}+/g).join("") // /[^\+\-\[\]\<\>\,\.]+/g to only exclude +-<>[].,
+}
+
+function replaceFcts(code) {
+    console.log("cleaning", code);
+    const toreplace = code.match(/\{[^\}]*\}+/g);
+
+    if (toreplace != null) {
+        for (const fct of toreplace) {
+            const fctobj = fct.split("{").join("").split("}").join("").split(".")
+
+            let usrcfg = filemgr.ldUsrCfg(fctobj[0], false);
+            console.log(usrcfg);
+            if (!usrcfg || !usrcfg.codes || !usrcfg.codes[fctobj[1]] || usrcfg.codes[fctobj[1]].rights == "private" || !usrcfg.codes[fctobj[1]].codeclean)
+                code = code.split(`${fct}`).join("")
+            else
+                code = code.split(`${fct}`).join(usrcfg.codes[fctobj[1]].codeclean)
+        }
+        return replaceFcts(code);
+    }
+    else
+        return code;
 }
 
 function cleanMem(mem) {
@@ -30,7 +53,7 @@ function cleanMem(mem) {
         * @return {bfreturn} brainfuck execution
         */
 function exe(rawcode, args) {
-    let code = rawcode.cleantobf();
+    let code = replaceFcts(rawcode.cleantobf());
     let res = {
         code: code.cleantobf(),
         step: 0,

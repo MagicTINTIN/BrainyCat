@@ -55,12 +55,12 @@ module.exports = {
         let rights = dscrd.interaction.getOpt(info.interaction, 'string', 'rights');
         let overwrite = dscrd.interaction.getOpt(info.interaction, 'boolean', 'overwrite');
 
-        let usrcfg = bot.file.ldUsrCfg(pseudo, true);
+        let usrcfg = bot.file.ldUsrCfg(pseudo, false);
 
         if (!rights)
             rights = 'opensource';
 
-        if (overwrite || !usrcfg.codes[name]) {
+        if ((overwrite && overwrite == true) || !usrcfg.codes[name]) {
             let now = Date.now();
             usrcfg.codes[name] = {
                 codetext: code,
@@ -69,10 +69,10 @@ module.exports = {
                 created: now,
                 modified: now,
             }
-            bot.file.svUsrCfg(pseudo, usrcfg, true);
+            bot.file.svUsrCfg(pseudo, usrcfg, false);
             dscrd.interaction.reply(info.interaction, true, `${name} has been saved ! It will execute\n\`\`\`brainfuck\n${usrcfg.codes[name].codeclean}\`\`\``)
         }
         else
-            dscrd.interaction.reply(info.interaction, true, `A program called ${name} already exists. If you wan to overwrite it put`)
+            dscrd.interaction.reply(info.interaction, true, `A program called ${name} already exists. If you wan to overwrite it set the option overwrite to *True*.`)
     }
 }

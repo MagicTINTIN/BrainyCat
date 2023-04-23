@@ -1,14 +1,1 @@
-{
-    "pseudo": "MagicTINTIN",
-    "version": 1,
-    "codes": {
-        "test": {
-            "codetext": "++ensuite>>+[on attaque la boucle et on utilise {MagicTINTIN.increment}-]>",
-            "codeclean": "++>>+[{MagicTINTIN.increment}-]>",
-            "rights": "publicuse",
-            "created": 1682264286669,
-            "modified": 1682264286669
-        }
-    },
-    "other": {}
-}
+{"pseudo":"MagicTINTIN","version":1,"codes":{"test":{"codetext":"++ensuite>>+[on attaque la boucle et on utilise {MagicTINTIN.increment}-]>++","codeclean":"++>>+[{MagicTINTIN.increment}-]>++","rights":"publicuse","created":1682265221580,"modified":1682265221580},"increment":{"codetext":">+++<","codeclean":">+++<","rights":"publicuse","created":1682266384422,"modified":1682266384422}},"other":{}}

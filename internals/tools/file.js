@@ -20,7 +20,7 @@ module.exports = {
         try { // Loading previous if it exists
             var previousfile = JSON.parse(fs.readFileSync(path.resolve(`./config/users/${pseudo}.json`)));
             if (!muted) bot.log.all(debugmsg.tools.file.caching + " userCfg : " + pseudo)
-            client.usrdata.get(pseudo) = previousfile;
+            client.usrdata.set(pseudo, previousfile);
             return previousfile;
         } catch (err) {
             if (!muted) bot.log.all(debugmsg.tools.file.nofile + " userCfg : " + pseudo);

@@ -10,7 +10,8 @@ module.exports = {
         //console.log(info);
         dscrd.interaction.reply(info.interaction, true, `To use the bot you just have to use /bf command.
 
-You can also save your codes by typing /save *(private|publicuse|opensource, optional)*,
+You can also save your codes by typing /save *name code (private|publicuse|opensource, optional)*,
+> Note if you put it in private, you will only be able to read it but not import it with {YourPseudo.name}.
 See the list of code you (you or someone else) created with /list *(PseudoOfTheCreator, optional)*,
 Edit read codes with /read *theProgramNameYouWantToRead*, if this program belongs to someone else who put it on opensource you will be able to read with /read *thePseudoOfTheCreator.theProgramNameYouWantToRead*
 Edit your codes with /edit *theProgramNameYouWantToEdit*,
