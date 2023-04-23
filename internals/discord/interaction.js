@@ -1,4 +1,4 @@
-const { BaseInteraction, SlashCommandBuilder, REST, Routes, InteractionType, SlashCommandStringOption } = require("discord.js");
+const { BaseInteraction, SlashCommandBuilder, REST, Routes, InteractionType, SlashCommandStringOption, ChatInputCommandInteraction, ApplicationCommandOptionType, ApplicationCommandType } = require("discord.js");
 const fs = require('fs');
 const path = require('path');
 const cfg = require('../../config/admin/config.json');
@@ -27,6 +27,8 @@ module.exports = {
                 var slashbuildingcmd = new SlashCommandBuilder()
                     .setName(cmd.name)
                     .setDescription(cmd.description)
+
+                slashbuildingcmd.type = ApplicationCommandType.ChatInput;
 
                 if (cmd.options)
                     for (const optioncfg of cmd.options) {
@@ -68,6 +70,7 @@ module.exports = {
         }
 
         const interactioncmdjson = interactioncmd.map(command => command.toJSON());
+        console.log(interactioncmdjson);
         rest.put(Routes.applicationCommands(cfg.appId), { body: interactioncmdjson })
             .then(() => bot.log.all(dbgmsg.interactions.loaded + internb + " interactions", true))
             .catch(console.error);
@@ -75,11 +78,26 @@ module.exports = {
     /**
         *   
         *
-        * @param {BaseInteraction} interaction interaction element
+        * //@param {BaseInteraction} interaction interaction element
         */
     on: function (interaction) {
         //console.log(interaction.commandName, client.cmds, client.cmds.has(interaction.commandName));
-        if (client.cmds.has(interaction.commandName) && interaction.isCommand()) {
+        if (interaction.isModalSubmit()) {
+            if (interaction.customId.startsWith('edtprog.')) {
+                let answer = {
+                    interaction: interaction,
+                    customId: interaction.customId,
+                    pseudo: interaction.customId.split(".")[1],
+                    progname: interaction.customId.split(".")[2],
+                    code: interaction.fields.getTextInputValue('code')
+                }
+                client.cmds.get('edit').postmodal(answer);
+            }
+            else
+                interaction.reply({ content: "Not working for the moment...", ephemeral: true })
+        }
+        else if (client.cmds.has(interaction.commandName) && interaction.isChatInputCommand()) { //isCommand() ?
+
             const info = {
                 interaction: interaction,
                 channel: interaction.channel.id,

@@ -16,6 +16,7 @@ const dscrd = {
     interaction: require("./discord/interaction"),
     message: require("./discord/message"),
     reaction: require("./discord/reaction"),
+    modal: require("./discord/modal"),
 }
 exports.dscrd = dscrd;
 

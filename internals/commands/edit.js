@@ -1,6 +1,11 @@
 const { dscrd } = require("../")
 const interaction = require("../discord/interaction")
 
+String.prototype.cleantobfedt = function () {
+    cleaned = this.match(/[\[\]\<\>\.\,\+\-]|\{[^\}]*\}+/g)
+    return (cleaned != null) ? cleaned.join("") : "" // /[^\+\-\[\]\<\>\,\.]+/g to only exclude +-<>[].,
+}
+
 module.exports = {
     type: 'slash',
     name: 'edit',
@@ -13,19 +18,45 @@ module.exports = {
             description: "Name of the program you want to edit",
         },
     ],
+    postmodal(answer) {
+        const { bot } = require("../../");
+
+        let usrcfg = bot.file.ldUsrCfg(answer.pseudo, true);
+        usrcfg.codes[answer.progname].codetext = answer.code;
+        usrcfg.codes[answer.progname].codeclean = answer.code.cleantobfedt();
+        bot.file.svUsrCfg(answer.pseudo, usrcfg, true);
+
+        dscrd.interaction.reply(answer.interaction, true, `${answer.progname} has been updated`);
+    },
     execute(info) {
         //console.log(info);
-        dscrd.interaction.reply(info.interaction, true, `To use the bot you just have to use /bf command.
+        const { bot } = require("../../");
 
-You can also save your codes by typing /save *(private|publicuse|opensource, optional)*,
-See the list of code you (you or someone else) created with /list *(PseudoOfTheCreator, optional)*,
-Edit read codes with /read *theProgramNameYouWantToRead*, if this program belongs to someone else who put it on opensource you will be able to read with /read *thePseudoOfTheCreator.theProgramNameYouWantToRead*
-Edit your codes with /edit *theProgramNameYouWantToEdit*,
-Delete codes with /del *theProgramNameYouWantToDelete*.
+        let usrlst = bot.file.ldUsrLst(true);
+        let pseudo = usrlst.usrs[info.userid];
+        if (!pseudo) return dscrd.interaction.reply(info.interaction, true, `You are not registered yet, please use /register before.`);
 
-To save your codes you will need to register one time with /register *yourPseudo*.
+        let name = dscrd.interaction.getOpt(info.interaction, 'string', 'name');
 
-Finally, you can import other codes (even made by other people who put their own code in publicuse or opensource) with **{Pseudo.ModuleName}** in your code
-        `)
+        let usrcfg = bot.file.ldUsrCfg(pseudo, true);
+
+        if (!usrcfg.codes[name])
+            dscrd.interaction.reply(info.interaction, true, `${name} doesn't exist yet`);
+
+        else {
+            let inputs = [
+                {
+                    customid: 'code',
+                    label: 'Code',
+                    style: 2,
+                    placeholder: 'Put brainf*ck code here',
+                    value: usrcfg.codes[name].codetext,
+                    min: 0,
+                    max: 0,
+                    required: true,
+                }
+            ]
+            bot.dscrd.modal.create(info.interaction, `edtprog.${pseudo}.${name}`, `Editing ${name}`, inputs)
+        }
     }
 }
