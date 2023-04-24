@@ -70,7 +70,7 @@ module.exports = {
         }
 
         const interactioncmdjson = interactioncmd.map(command => command.toJSON());
-        console.log(interactioncmdjson);
+
         rest.put(Routes.applicationCommands(cfg.appId), { body: interactioncmdjson })
             .then(() => bot.log.all(dbgmsg.interactions.loaded + internb + " interactions", true))
             .catch(console.error);
