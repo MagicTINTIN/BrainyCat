@@ -16,7 +16,7 @@ module.exports = {
     execute(info) {
         let splittedmsg = dscrd.interaction.getOpt(info.interaction, 'string', 'code').split("$");
         let bfres = base.bf.exe(splittedmsg[0], splittedmsg);
-        if (bfres.mem[bfres.posMem])
+        if (posMem < bfres.mem.length)
             bfres.mem[bfres.posMem] = `**${bfres.mem[bfres.posMem]}**`;
         dscrd.interaction.reply(info.interaction, false,
             (bfres.success ? "Successfully executed in " : `**Error** occurred at character **${bfres.posProg}** after `)
